@@ -32,7 +32,7 @@ def deploy_frontend():
     os.system("rmdir /S /Q Dorel-angular")
     os.system("git clone https://github.com/2412rock/Dorel-angular")
     for file in os.listdir("C:/Users/Server/Desktop/certs"):
-        shutil.copy(file, "C:/Users/Server/Desktop/Dorel-angular")
+        shutil.copy("C:/Users/Server/Desktop/certs/"+file, "C:/Users/Server/Desktop/Dorel-angular")
     os.chdir("C:/Users/Server/Desktop/Dorel-angular")
     os.system("docker stop angular-app")
     os.system("docker rm angular-app")
