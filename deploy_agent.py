@@ -37,7 +37,7 @@ def deploy_frontend():
     os.system("docker stop angular-app")
     os.system("docker rm angular-app")
     os.system("docker build -t dorel-angular .")
-    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "80:80", "dorel-angular"])
+    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"])
 
 def deploy_backend():
     os.chdir("C:/Users/Server/Desktop")
