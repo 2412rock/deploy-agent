@@ -20,14 +20,14 @@ def post_data():
         should_deploy_redis = data["deploy_redis"]
         should_deploy_sql = data["deploy_sql"]
 
-        if deploy_fe:
-            deploy_frontend()
-        if deploy_be:
-            deploy_backend()
         if should_deploy_redis:
             deploy_redis_server()
         if should_deploy_sql:
             deploy_sql_server()
+        if deploy_fe:
+            deploy_frontend()
+        if deploy_be:
+            deploy_backend()
 
         # Return a JSON response
         return jsonify("ok"), 200
