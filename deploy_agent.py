@@ -12,6 +12,7 @@ def post_data():
     data = request.get_json()
     f = open('C:/Users/Server/Documents/password.txt', 'r')
     password = f.readline()
+    f.close()
     if password == data["password"]:
         deploy_fe = data["deploy_frontend"]
         deploy_be = data["deploy_backend"]
@@ -47,7 +48,10 @@ def deploy_backend():
     os.system("docker stop dorel-backend")
     os.system("docker rm dorel-backend")
     os.system("docker build -t dorel-backend .")
-    subprocess.Popen(["docker", "run" ,"--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
+    email_password_file = open('C:/Users/Server/Documents/email_password.txt', 'r')
+    email_password = email_password_file.readline()
+    email_password_file.close()
+    subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD="{email_password}"', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
     app.run(host="192.168.1.239", port="4300",debug=True)
