@@ -93,7 +93,7 @@ def deploy_backend():
     email_password_file = open('C:/Users/Server/Documents/email_password.txt', 'r')
     email_password = email_password_file.readline()
     email_password_file.close()
-    subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD="{email_password}"', "-e", f'SA_PASSWORD="{getSqlPassword()}"',
+    subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD="{getSqlPassword()}"',
                        "-e", f'REDIS_PASSWORD="{get_redis_password()}"', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
