@@ -97,8 +97,8 @@ def deploy_backend():
     pfx_pass_file = open('C:/Users/Server/Documents/pfx_pass.txt', 'r')
     pfx_pass = pfx_pass_file.readline()
     pfx_pass_file.close()
-    subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD="{getSqlPassword()}"',
-                       "-e", f'REDIS_PASSWORD="{get_redis_password()}"', "-e", f'PFX_PASS={pfx_pass}', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
+    subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD={getSqlPassword()}',
+                       "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
     app.run(host="192.168.1.159", port="4300",debug=True)
