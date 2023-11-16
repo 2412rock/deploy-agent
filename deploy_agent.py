@@ -86,6 +86,7 @@ def deploy_backend():
     os.chdir("C:/Users/Server/Desktop")
     os.system("rmdir /S /Q Dorel-backend")
     os.system("git clone https://github.com/2412rock/Dorel-backend")
+    shutil.copy("C:/Users/Server/Desktop/certs/backendcertificate.pfx", "C:/Users/Server/Desktop/Dorel-backend")
     os.chdir("C:/Users/Server/Desktop/Dorel-backend")
     os.system("docker stop dorel-backend")
     os.system("docker rm dorel-backend")
@@ -93,8 +94,11 @@ def deploy_backend():
     email_password_file = open('C:/Users/Server/Documents/email_password.txt', 'r')
     email_password = email_password_file.readline()
     email_password_file.close()
+    pfx_pass_file = open('C:/Users/Server/Documents/pfx_pass.txt', 'r')
+    pfx_pass = pfx_pass_file.readline()
+    pfx_pass_file.close()
     subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD="{getSqlPassword()}"',
-                       "-e", f'REDIS_PASSWORD="{get_redis_password()}"', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
+                       "-e", f'REDIS_PASSWORD="{get_redis_password()}"', "-e", f'PFX_PASS={pfx_pass}', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
     app.run(host="192.168.1.239", port="4300",debug=True)
