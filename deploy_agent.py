@@ -109,7 +109,7 @@ def deploy_backend():
     jwt_secret = readLineFromFile("C:/Users/Server/Documents/JWT_SECRET.txt")
     subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD={getSqlPassword()}',
                        "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}',
-                       "-e", f"JWT_SECRET={jwt_secret}"
+                       "-e", f"JWT_SECRET={jwt_secret}",
                          "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
