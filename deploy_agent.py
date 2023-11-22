@@ -85,6 +85,12 @@ def deploy_frontend():
     os.system("docker build -t dorel-angular .")
     subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"])
 
+def readLineFromFile(file):
+    f = open(file)
+    result = f.readline()
+    f.close()
+    return result
+
 def deploy_backend():
     os.chdir("C:/Users/Server/Desktop")
     os.system("rmdir /S /Q Dorel-backend")
@@ -100,8 +106,11 @@ def deploy_backend():
     pfx_pass_file = open('C:/Users/Server/Documents/pfx_pass.txt', 'r')
     pfx_pass = pfx_pass_file.readline()
     pfx_pass_file.close()
+    jwt_secret = readLineFromFile("C:/Users/Server/Documents/JWT_SECRET.txt")
     subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD={getSqlPassword()}',
-                       "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}', "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
+                       "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}',
+                       "-e", f"JWT_SECRET={jwt_secret}"
+                         "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
     app.run(host="192.168.1.159", port="4300",debug=True)
