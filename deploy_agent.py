@@ -20,6 +20,7 @@ def post_data():
         deploy_be = data["deploy_backend"]
         should_deploy_redis = data["deploy_redis"]
         should_deploy_sql = data["deploy_sql"]
+        should_deploy_minio = data["deploy_minio"]
 
         if should_deploy_redis:
             deploy_redis_server()
@@ -29,6 +30,8 @@ def post_data():
             deploy_frontend()
         if deploy_be:
             deploy_backend()
+        if should_deploy_minio:
+            deploy_minio_server()
 
         # Return a JSON response
         return jsonify("ok"), 200
@@ -39,6 +42,18 @@ def get_redis_password():
     redis_password = file.readline()
     file.close()
     return redis_password
+
+def deploy_minio_server():
+    password = readLineFromFile("C:/Users/Server/Documents/minio_password.txt")
+
+    os.system("docker stop minio-server")
+    os.system("docker rm minio-server")
+    os.system("docker pull minio/minio")
+    subprocess.Popen(["docker", "run", "-p", "9000:9000", "-e", "MINIO_ROOT_USER=minioadmin", "-e",
+                       f"MINIO_ROOT_PASSWORD={password}",
+                         "minio/minio", "server",
+                           "/data",
+                           "--name", "minio-server"])
 
 def deploy_redis_server():
     os.chdir("C:/Users/Server/Desktop")
@@ -107,9 +122,11 @@ def deploy_backend():
     pfx_pass = pfx_pass_file.readline()
     pfx_pass_file.close()
     jwt_secret = readLineFromFile("C:/Users/Server/Documents/JWT_SECRET.txt")
+    minio_password = readLineFromFile("C:/Users/Server/Documents/minio_password.txt")
     subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD={getSqlPassword()}',
                        "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}',
                        "-e", f"JWT_SECRET={jwt_secret}",
+                       "-e", f"MINIO_PASS={minio_password}",
                          "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
