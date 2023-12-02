@@ -49,11 +49,11 @@ def deploy_minio_server():
     os.system("docker stop minio-server")
     os.system("docker rm minio-server")
     os.system("docker pull minio/minio")
-    subprocess.Popen(["docker", "run", "-p", "9000:9000", "-e", "MINIO_ROOT_USER=minioadmin", "-e",
+    subprocess.Popen(["docker", "run", "--name", "minio-server","-p", "9000:9000", "-e", "MINIO_ROOT_USER=minioadmin", "-e",
                        f"MINIO_ROOT_PASSWORD={password}",
                          "minio/minio", "server",
-                           "/data",
-                           "--name", "minio-server"])
+                           "/data"
+                           ])
 
 def deploy_redis_server():
     os.chdir("C:/Users/Server/Desktop")
