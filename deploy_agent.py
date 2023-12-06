@@ -80,7 +80,7 @@ def deploy_sql_server():
     os.system("docker stop sql-server")
     os.system("docker rm sql-server")
     os.system("docker build -t sql-server .")
-    
+    #docker run, -e, SA_PASSWORD=MyP@ssword1!,-d -p 1433:1433 --name sql-server sql-server
     subprocess.Popen(["docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',"-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"])
     print('Waiting for server to start')
     time.sleep(10)
@@ -98,7 +98,7 @@ def deploy_frontend():
     os.system("docker stop angular-app")
     os.system("docker rm angular-app")
     os.system("docker build -t dorel-angular .")
-    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"])
+    subprocess.Popen(["docker", "run", "--name", "angular-app", "--network=host", "-p", "443:443", "dorel-angular"])
 
 def readLineFromFile(file):
     f = open(file)
