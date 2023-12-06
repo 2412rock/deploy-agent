@@ -124,12 +124,10 @@ def deploy_backend():
     pfx_pass_file.close()
     jwt_secret = readLineFromFile("C:/Users/Server/Documents/JWT_SECRET.txt")
     minio_password = readLineFromFile("C:/Users/Server/Documents/minio_password.txt")
-    os.system("docker network create --subnet=172.26.17.0/24 my_zerotier_network")
     subprocess.Popen(["docker", "run" , "-e", f'EMAIL_PASSWD={email_password}', "-e", f'SA_PASSWORD={getSqlPassword()}',
                        "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}',
                        "-e", f"JWT_SECRET={jwt_secret}",
                        "-e", f"MINIO_PASS={minio_password}",
-                       "--network=my_zerotier_network",
                          "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
