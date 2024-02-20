@@ -85,6 +85,7 @@ def deploy_sql_server():
     print('Waiting for server to start')
     time.sleep(10)
     os.system("docker cp init.sql sql-server:/usr/src")
+    #docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P MyP@ssword1! -d master -i /usr/src/init.sql
     os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/init.sql")
 
 
