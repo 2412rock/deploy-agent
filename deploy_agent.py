@@ -22,6 +22,8 @@ def post_data():
         should_deploy_sql = data["deploy_sql"]
         should_deploy_minio = data["deploy_minio"]
 
+        deploy_sql_migrations()
+        
         if should_deploy_redis:
             deploy_redis_server()
         if should_deploy_sql:
@@ -72,6 +74,20 @@ def getSqlPassword():
     f.close()
     return password
 
+def deploy_sql_migrations():
+    os.chdir("C:/Users/Server/Desktop")
+    os.system("rmdir /S /Q sql-server-docker")
+    os.system("git clone https://github.com/2412rock/sql-server-docker")
+    os.chdir("C:/Users/Server/Desktop/sql-server-docker")
+    subprocess.Popen(["docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',"-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"])
+    print('Waiting for server to start')
+    time.sleep(10)
+    os.system("docker cp init.sql sql-server:/usr/src")
+    os.system("docker cp pupulate_with_data.sql sql-server:/usr/src")
+    #docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P MyP@ssword1! -d master -i /usr/src/init.sql
+    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/init.sql")
+    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/pupulate_with_data.sql")
+
 def deploy_sql_server():
     os.chdir("C:/Users/Server/Desktop")
     os.system("rmdir /S /Q sql-server-docker")
@@ -85,8 +101,10 @@ def deploy_sql_server():
     print('Waiting for server to start')
     time.sleep(10)
     os.system("docker cp init.sql sql-server:/usr/src")
+    os.system("docker cp pupulate_with_data.sql sql-server:/usr/src")
     #docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P MyP@ssword1! -d master -i /usr/src/init.sql
     os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/init.sql")
+    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/pupulate_with_data.sql")
 
 
 def deploy_frontend():
