@@ -95,7 +95,10 @@ def deploy_sql_server():
     os.system("docker rm sql-server")
     os.system("docker build -t sql-server .")
     #docker run, -e, SA_PASSWORD=MyP@ssword1!,-d -p 1433:1433 --name sql-server sql-server
-    subprocess.Popen(["docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',"-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"])
+    subprocess.Popen([
+    "docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',
+    "-d", "-p", "192.168.1.100:1433:1433", "--name", "sql-server", "sql-server"
+])
     print('Waiting for server to start')
     time.sleep(10)
     os.system("docker cp init.sql sql-server:/usr/src")
