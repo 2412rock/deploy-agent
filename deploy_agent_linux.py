@@ -148,4 +148,4 @@ def deploy_backend():
                          "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
-    app.run(host="34.140.138.14", port="4300",debug=True)
+    app.run(port="4300",debug=True)
