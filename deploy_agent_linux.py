@@ -97,15 +97,15 @@ def deploy_sql_server():
     #docker run, -e, SA_PASSWORD=MyP@ssword1!,-d -p 1433:1433 --name sql-server sql-server
     subprocess.Popen([
     "docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',
-    "-d", "-p", "10.132.0.2:1433:1433", "--name", "sql-server", "sql-server"
+    "-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"
 ])
     print('Waiting for server to start')
     time.sleep(10)
     os.system("docker cp init.sql sql-server:/usr/src")
     os.system("docker cp pupulate_with_data.sql sql-server:/usr/src")
     #docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P MyP@ssword1! -d master -i /usr/src/init.sql
-    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S 10.132.0.2 -U sa -P {getSqlPassword()} -d master -i /usr/src/init.sql")
-    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S 10.132.0.2 -U sa -P {getSqlPassword()} -d master -i /usr/src/pupulate_with_data.sql")
+    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/init.sql")
+    os.system(f"docker exec -it sql-server /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P {getSqlPassword()} -d master -i /usr/src/pupulate_with_data.sql")
 
 
 def deploy_frontend():
