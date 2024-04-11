@@ -118,8 +118,8 @@ def deploy_frontend():
     os.system("docker stop angular-app")
     os.system("docker rm angular-app")
     os.system("docker build -t dorel-angular .")
-    os.system("docker network create --subnet=172.26.17.0/24 my_zerotier_network")
-    subprocess.Popen(["docker", "run", "--name", "angular-app", "--network=my_zerotier_network", "-p", "443:443", "dorel-angular"])
+   
+    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"])
 
 def readLineFromFile(file):
     f = open(file)
