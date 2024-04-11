@@ -55,7 +55,7 @@ def deploy_minio_server():
                        f"MINIO_ROOT_PASSWORD={password}",
                          "minio/minio", "server",
                            "/data"
-                           ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, detach=True)
+                           ])
 
 def deploy_redis_server():
     os.chdir("/home/dorelapp1/code")
@@ -66,7 +66,7 @@ def deploy_redis_server():
     os.system("docker rm redis-server")
     os.system("docker build -t redis .")
     
-    subprocess.Popen(["docker", "run", "-d", "-p", "6379:6379", "--name", "redis-server", "-e", f"REDIS_PASSWORD={get_redis_password()}", "redis"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, detach=True)
+    subprocess.Popen(["docker", "run", "-d", "-p", "6379:6379", "--name", "redis-server", "-e", f"REDIS_PASSWORD={get_redis_password()}", "redis"])
 
 def getSqlPassword():
     f = open('/home/dorelapp1/keys/sql_password.txt', 'r')
@@ -98,7 +98,7 @@ def deploy_sql_server():
     subprocess.Popen([
     "docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',
     "-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"
-], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, detach=True)
+])
     print('Waiting for server to start')
     time.sleep(10)
     os.system("docker cp init.sql sql-server:/usr/src")
@@ -119,7 +119,8 @@ def deploy_frontend():
     os.system("docker rm angular-app")
     os.system("docker build -t dorel-angular .")
    
-    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, detach=True )
+    subprocess.Popen(["docker", "run", "--name", "angular-app", "-p", "443:443", "dorel-angular"])
+
 def readLineFromFile(file):
     f = open(file)
     result = f.readline()
@@ -147,7 +148,7 @@ def deploy_backend():
                        "-e", f'REDIS_PASSWORD={get_redis_password()}', "-e", f'PFX_PASS={pfx_pass}',
                        "-e", f"JWT_SECRET={jwt_secret}",
                        "-e", f"MINIO_PASS={minio_password}",
-                         "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE, detach=True)
+                         "--name" ,"dorel-backend", "-p" ,"4200:4200" ,"dorel-backend"])
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port="80",debug=True)
