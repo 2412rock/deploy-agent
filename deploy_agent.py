@@ -51,6 +51,7 @@ def deploy_minio_server():
     os.system("docker stop minio-server")
     os.system("docker rm minio-server")
     os.system("docker pull minio/minio")
+    #docker run --name minio-server -p 9000:9000 -e MINIO_ROOT_USER=minioadmin -e MINIO_ROOT_PASSWORD=MyP@ssword1! minio/minio server /data
     subprocess.Popen(["docker", "run", "--name", "minio-server","-p", "9000:9000", "-e", "MINIO_ROOT_USER=minioadmin", "-e",
                        f"MINIO_ROOT_PASSWORD={password}",
                          "minio/minio", "server",
@@ -94,7 +95,7 @@ def deploy_sql_server():
     os.system("docker stop sql-server")
     os.system("docker rm sql-server")
     os.system("docker build -t sql-server .")
-    #docker run, -e, SA_PASSWORD=MyP@ssword1!,-d -p 1433:1433 --name sql-server sql-server
+    #docker run, -e, SA_PASSWORD=MyP@ssword1! -d -p 1433:1433 --name sql-server sql-server
     subprocess.Popen(["docker", "run", "-e", f'SA_PASSWORD={getSqlPassword()}',"-d", "-p", "1433:1433", "--name", "sql-server", "sql-server"])
     print('Waiting for server to start')
     time.sleep(10)
