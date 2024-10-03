@@ -112,14 +112,14 @@ def deploy_frontend():
     os.chdir("C:/Users/Server/Desktop")
     os.system("rmdir /S /Q Dorel-angular")
     os.system("git clone https://github.com/2412rock/Dorel-angular")
-    for file in os.listdir("C:/Users/Server/Desktop/certs"):
-        shutil.copy("C:/Users/Server/Desktop/certs/"+file, "C:/Users/Server/Desktop/Dorel-angular")
+    # for file in os.listdir("C:/Users/Server/Desktop/certs"):
+    #     shutil.copy("C:/Users/Server/Desktop/certs/"+file, "C:/Users/Server/Desktop/Dorel-angular")
     os.chdir("C:/Users/Server/Desktop/Dorel-angular")
     os.system("docker stop dorel-angular")
     os.system("docker rm dorel-angular")
     os.system("docker build -t dorel-angular .")
     #os.system("docker network create --subnet=172.26.17.0/24 my_zerotier_network")
-    subprocess.Popen(["docker", "run", "--name", "dorel-angular", "-p", "443:443", "dorel-angular"])
+    subprocess.Popen(["docker", "run", "--name", "dorel-angular", "-p", "80:80", "dorel-angular"])
 
 def readLineFromFile(file):
     f = open(file)
